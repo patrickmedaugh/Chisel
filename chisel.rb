@@ -1,5 +1,5 @@
 class Chisel
-  attr_reader :document, :lines  # => nil
+  attr_reader :document, :lines, :first_chars  # => nil
 
   def initialize(document)
     @document = document    # => "#Here is my document.\n Here is another element"
@@ -9,19 +9,18 @@ class Chisel
   def line_break
     @lines = @document.split("\n")  # => ["#Here is my document.", " Here is another element"]
   end
-#see what that line starts with #####, ####, ###, ##, #, or /n
 
-  def punc_sub
-    @document = "#{document.gsub("#", "<h1>")}</h1>"
+#look at first character of each line
+#if first character is \n create a Line Object with HTMLTAG: para and CONTENT: line without punctuation
+#if first character is #, count the number of #s
+
+  #this will determine which html tag
+  def line_first
+    @first_chars = []
+    lines.each do |line|
+      first_chars << line[0]
+    end
   end
 
+  #this will determine magnitude of tag
 end
-
-parser = Chisel.new("#Here is my document.\n Here is another element")  # => #<Chisel:0x007ff49991a768 @document="#Here is my document.\n Here is another element">
-parser.line_break                                                       # => ["#Here is my document.", " Here is another element"]
-puts parser.lines[0]                                                       # => nil
-
-
-
-# >> #Here is my document.
-# >>  Here is another element
