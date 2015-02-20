@@ -41,4 +41,19 @@ class ChiselTest < Minitest::Test
     assert_equal ["<p>This is a line ","<p> so is this."], parser.line_changes
   end
 
+  def test_it_can_add_an_end_tag
+    parser = Chisel.new("#####This is a line \n#####so is this")
+    parser.line_break
+    parser.line_change
+    parser.end_tags
+    assert_equal ["<h5>This is a line </h5>", "<h5>so is this</h5>"], parser.lines
+  end
+
+  def test_the_lines_array_can_be_turned_back_into_a_document
+    parser = Chisel.new("#####This is a line \n#####so is this")
+    parser.line_break
+    parser.line_change
+    parser.end_tags
+    assert_equal "<h5>This is a line </h5>\n<h5>so is this</h5>", parser.rejoin_doc
+  end
 end
