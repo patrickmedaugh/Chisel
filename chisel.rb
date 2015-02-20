@@ -1,26 +1,32 @@
 class Chisel
-  attr_reader :document, :lines, :first_chars  # => nil
+  attr_reader :document, :lines, :line_changes
 
   def initialize(document)
-    @document = document    # => "#Here is my document.\n Here is another element"
+    @document = document
   end
 
 #break it up line by line
   def line_break
-    @lines = @document.split("\n")  # => ["#Here is my document.", " Here is another element"]
+    @lines = document.split("\n")
   end
 
-#look at first character of each line
-#if first character is \n create a Line Object with HTMLTAG: para and CONTENT: line without punctuation
-#if first character is #, count the number of #s
-
-  #this will determine which html tag
-  def line_first
-    @first_chars = []
-    lines.each do |line|
-      first_chars << line[0]
-    end
+#look at beginning of each string
+  def line_change
+    @line_changes = lines.map do |line|
+      if line.start_with?("#####")
+        line.gsub("#####", "<h5>")
+      elsif line.start_with?("####")
+        line.gsub("####", "<h4>")
+      elsif line.start_with?("###")
+        line.gsub("###", "<h3>")
+      elsif line.start_with?("##")
+        line.gsub("##", "<h2>")
+      elsif line.start_with?("#")
+        line.gsub("#", "<h1>")
+      else
+        line = "<p>#{line}"
+      end
+      end
   end
 
-  #this will determine magnitude of tag
 end

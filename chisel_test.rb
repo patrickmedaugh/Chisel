@@ -20,11 +20,25 @@ class ChiselTest < Minitest::Test
     assert_equal "this is also a line.", parser.lines[1]
   end
 
-  def test_it_can_look_at_the_first_char_of_each_line
-    parser = Chisel.new("This is a line \nthis is also a line.")
+  def test_it_can_convert_header_punctuation
+    parser = Chisel.new("##This is a line \n#this is also a line.")
     parser.line_break
-    parser.line_first
-    assert_equal ["T", "t"], parser.first_chars
+    parser.line_change
+    assert_equal ["<h2>This is a line ", "<h1>this is also a line."], parser.line_changes
+  end
+
+  def test_it_can_convert_up_to_header_five
+    parser = Chisel.new("#####This is a line \n####this is also a line.")
+    parser.line_break
+    parser.line_change
+    assert_equal ["<h5>This is a line ", "<h4>this is also a line."], parser.line_changes
+  end
+
+  def test_a_string_without_punctuation_will_be_given_a_paragraph_tag
+    parser = Chisel.new("This is a line \n so is this.")
+    parser.line_break
+    parser.line_change
+    assert_equal ["<p>This is a line ","<p> so is this."], parser.line_changes
   end
 
 end
